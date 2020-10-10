@@ -8,13 +8,19 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     </head>
     <body>
+      
         <h1> Deceased Person Graph</h1>
-        <canvas id="myChart" width="400" height="200"></canvas>
-
+        <a href="#" id="downloadPdf">Download Report Page as PDF</a>
+         <br/><br/>
+         <div id="reportPage">
+           <div id="chartContainer" style="width: 30%;float: left;">
+             <canvas id="myChart"></canvas>
+           </div>
+         </div>
         <!-- <input type="string" name="yValue" placeholder="Y Value" id="YValue" />
         <input type="submit" id="update" value="Update" /> -->
         
-        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"></form>
+        <form name="myForm1" action="/action_page.php" onsubmit="return validateForm()" method="post"></form>
           <label for="States">State:</label>
           <select id="States" name="States">
             <option Svalue= "Andaman and Nicobar Islands" input id="States">Andaman and Nicobar Islands</option>
@@ -52,13 +58,39 @@
           </select>
           <form name="myForm" action="/action_page.php" onsubmit="return getData()" method="post"></form>
           <input type="submit" id="States" value="Submit">
+          
         </form>
 
+        <form>
+          <label for="Gender">Gender:</label>
+          <select id="Gender" name="Gender">
+            <option Gvalue= "Male" input id="Gender">Male</option>
+            <option Gvalue="Female" input id="Gender">Female</option>
+            <option Gvalue="NA" input id="Gender">NA</option>
+            </select>
+        </form>
+        <form>
+          <label for="Age Groups">Age Groups:</label>
+          <select id="Age Groups" name="Age Groups">
+            <option Avalue="0-9"input id="Age Groups">0-9</option>
+            <option Avalue="10-19"input id="Age Groups">10-19</option>
+            <option Avalue="20-29"input id="Age Groups">20-29</option>
+            <option Avalue="30-39"input id="Age Groups">30-39</option>
+            <option Avalue="40-49"input id="Age Groups">40-49</option>
+            <option Avalue="50-59"input id="Age Groups">50-59</option>
+            <option Avalue="60-69"input id="Age Groups">60-69</option>
+            <option Avalue="70 and above"input id="70 and above">70 and above</option>
+          </select>
+        </form>
+        <form>
+          <label for="Date Range">Date Range:</label>
+          <input type="Date" id="DateRange1" name="DateRange1">
+          <input type="Date" id="DateRange2" name="DateRange2">
+        </form>
         <!-- <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
           Name: <input type="text" name="fname">
           <input type="submit" value="Submit">
           </form> -->
-
             <script>
 //               function validateForm() {
 //   var x = document.forms["myForm"]["fname"].value;
@@ -100,22 +132,89 @@
                      const columns = row.split(',');
                      const patientid = columns[0];
                      const reportedon = columns[1];
+                     const Date11=document.getElementById("DateRange1")
+                     const Date22=document.getElementById("DateRange2")
+                     if(columns[1]>=Date11 && columns[1]<=Date22)
+                     {
                      date.push(reportedon);
+                     }
                      const ageestimate = columns[3];
                      const gender = columns[4];
                      const state = columns[7];
                      const status = columns[8];
                     const Svalue1=document.getElementById("States")
-                     if(columns[8]='deceased' && columns[7]==Svalue1 )
+                    const Gvalue1=document.getElementById("Gender")
+                    const Avalue1=document.getElementById("Age Groups")
+                    // const Avalue2=Avalue1.substring(0, 2);
+                     if(columns[8]='deceased' && columns[7]==Svalue1)
                      {
                          i++;
                      dec.push(i);
+                     }
+                     else if(columns[8]='deceased' && columns[4]==Gvalue1)
+                     {
+                       i++;
+                       dec.push(i);
+                     }
+                     else if(columns[8]='deceased' && columns[3]<Avalue1+10 && columns[3]>=Avalue1)
+                     {
+                       i++;
+                       decpush(i);
                      }
                     console.log(patientid, reportedon, ageestimate, gender, state, status); 
                  });
                  return{date, dec};   
              }
          </script>
+         
+         <script>
+          import { jsPDF } from "jspdf";
+          //     var doc= new jsPDF();
+          //     doc.autopPrint({variant:'non-conform'});
+          //     doc.savePdf();
+          $('#downloadPdf').click(function(event) {
+  // get size of report page
+  var reportPageHeight = $('#reportPage').innerHeight();
+  var reportPageWidth = $('#reportPage').innerWidth();
+  
+  // create a new canvas object that we will populate with all other canvas objects
+  var pdfCanvas = $('<canvas />').attr({
+    id: "canvaspdf",
+    width: reportPageWidth,
+    height: reportPageHeight
+  });
+  
+  // keep track canvas position
+  var pdfctx = $(pdfCanvas)[0].getContext('2d');
+  var pdfctxX = 0;
+  var pdfctxY = 0;
+  var buffer = 100;
+  
+  // for each chart.js chart
+  $("canvas").each(function(index) {
+    // get the chart height/width
+    var canvasHeight = $(this).innerHeight();
+    var canvasWidth = $(this).innerWidth();
+    
+    // draw the chart into the new canvas
+    pdfctx.drawImage($(this)[0], pdfctxX, pdfctxY, canvasWidth, canvasHeight);
+    pdfctxX += canvasWidth + buffer;
+    
+    // our report page is in a grid pattern so replicate that in the new canvas
+    if (index % 2 === 1) {
+      pdfctxX = 0;
+      pdfctxY += canvasHeight + buffer;
+    }
+  });
+  
+  // create new pdf and add our new canvas as an image
+  var pdf = new jsPDF('l', 'pt', [reportPageWidth, reportPageHeight]);
+  pdf.addImage($(pdfCanvas)[0], 'PNG', 0, 0);
+  
+  // download the pdf
+  pdf.save('filename.pdf');
+});
+            </script>
      </body>
 </html> 
 
