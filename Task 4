@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport"content="width-device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Comaptible" content="ie=edge"/>
+        <title>Detch and Graph CSV</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    </head>
+    <body>
+        <h1> Deceased Person Graph</h1>
+        <canvas id="myChart" width="400" height="200"></canvas>
+
+        <!-- <input type="string" name="yValue" placeholder="Y Value" id="YValue" />
+        <input type="submit" id="update" value="Update" /> -->
+        
+        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"></form>
+          <label for="States">State:</label>
+          <select id="States" name="States">
+            <option Svalue= "Andaman and Nicobar Islands" input id="States">Andaman and Nicobar Islands</option>
+            <option Svalue="Andhra Pradesh">Andhra Pradesh</option>
+            <option Svalue="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option Svalue="Assam">Assam</option>
+            <option Svalue="Bihar">Bihar</option>
+            <option Svalue="Chandigarh">Chandigarh</option>
+            <option Svalue="Chattisgrah">Chattisgarh</option>
+            <option Svalue="Delhi">Delhi</option>
+            <option Svalue="Goa">Goa</option>
+            <option Svalue="Gujarat">Gujarat</option>
+            <option Svalue="Haryana">Haryana</option>
+            <option Svalue="Himachal Pradesh">Himachal Pradesh</option>
+            <option Svalue="Jammu and Kashmir">Jammu and Kashmir</option>
+            <option Svalue="Jharkhand">Jharkhand</option>
+            <option Svalue="Karnataka">Karnataka</option>
+            <option Svalue="Kerala">Kerala</option>
+            <option Svalue="Ladakh">Ladakh</option>
+            <option Svalue="Madhya Pradesh">Madhya Pradesh</option>
+            <option Svalue="Maharashtra">Maharashtra</option>
+            <option Svalue="Manipur">Manipur</option>
+            <option Svalue="Meghalaya">Meghalaya</option>
+            <option Svalue="Mizoram">Mizoram</option>
+            <option Svalue="Odisha">Odisha</option>
+            <option Svalue="Puducherry">Puducherry</option>
+            <option Svalue="Punjab">Punjab</option>
+            <option Svalue="Rajasthan">Rajasthan</option>
+            <option Svalue="Tamil Nadu">Tamil Nadu</option>
+            <option Svalue="Telagana">Telangana</option>
+            <option Svalue="Uttar Pradesh">Uttar Pradesh</option>
+            <option Svalue="Uttarakhand">Uttarakhand</option>
+            <option Svalue="West Bengal">West Bengal</option>
+            <option Svalue=" ">Other</option>
+          </select>
+          <form name="myForm" action="/action_page.php" onsubmit="return getData()" method="post"></form>
+          <input type="submit" id="States" value="Submit">
+        </form>
+
+        <!-- <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
+          Name: <input type="text" name="fname">
+          <input type="submit" value="Submit">
+          </form> -->
+
+            <script>
+//               function validateForm() {
+//   var x = document.forms["myForm"]["fname"].value;
+//   if (x == "") {
+//     alert("Name must be filled out");
+//     return false;
+//   }
+// }
+             window.addEventListener('load', setup);
+             async function setup() {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const globalTemps = await getData();
+        const myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: globalTemps.date,
+            datasets: [
+              {
+                label: 'Deceased',
+                data: globalTemps.dec,
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {}
+        });
+             }
+            async function getData() {
+                 i=0;
+                 const response=await fetch("covid19india.csv");
+                 const data=await response.text();
+                const date=[];
+                 const dec=[];
+                 const rows = data.split('\n').slice(1);
+                 rows.forEach(row => {
+                     const columns = row.split(',');
+                     const patientid = columns[0];
+                     const reportedon = columns[1];
+                     date.push(reportedon);
+                     const ageestimate = columns[3];
+                     const gender = columns[4];
+                     const state = columns[7];
+                     const status = columns[8];
+                    const Svalue1=document.getElementById("States")
+                     if(columns[8]='deceased' && columns[7]==Svalue1 )
+                     {
+                         i++;
+                     dec.push(i);
+                     }
+                    console.log(patientid, reportedon, ageestimate, gender, state, status); 
+                 });
+                 return{date, dec};   
+             }
+         </script>
+     </body>
+</html> 
+
