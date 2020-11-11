@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Flipr/static/css/main.5f361e03.chunk.css",
+    "main.js": "/Flipr/static/js/main.acf38889.chunk.js",
+    "main.js.map": "/Flipr/static/js/main.acf38889.chunk.js.map",
+    "runtime-main.js": "/Flipr/static/js/runtime-main.3d8c2ec1.js",
+    "runtime-main.js.map": "/Flipr/static/js/runtime-main.3d8c2ec1.js.map",
+    "static/js/2.0767997b.chunk.js": "/Flipr/static/js/2.0767997b.chunk.js",
+    "static/js/2.0767997b.chunk.js.map": "/Flipr/static/js/2.0767997b.chunk.js.map",
+    "index.html": "/Flipr/index.html",
+    "precache-manifest.6928df151aac0b6aaedec5d1f3977fd6.js": "/Flipr/precache-manifest.6928df151aac0b6aaedec5d1f3977fd6.js",
+    "service-worker.js": "/Flipr/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/Flipr/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.0767997b.chunk.js.LICENSE.txt": "/Flipr/static/js/2.0767997b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3d8c2ec1.js",
+    "static/js/2.0767997b.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.acf38889.chunk.js"
+  ]
+}
